@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev":"nodemon src/server.js",
   },
   "author": "Abhishek Santra",
   "license": "ISC",
   "dependencies": {
-    "mongoose": "^8.0.0",
+    "mongoose": "^8.0.0"
+  },
+  "devDependencies": {
     "nodemon": "^3.0.1"
   }
 }
