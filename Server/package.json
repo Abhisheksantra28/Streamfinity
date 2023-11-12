@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev":"nodemon src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "author": "Abhishek Santra",
   "license": "ISC",
@@ -13,6 +13,7 @@
     "mongoose": "^8.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.3"
   }
 }
