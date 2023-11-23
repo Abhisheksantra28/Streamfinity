@@ -31,12 +31,23 @@ export const registerUser = asyncHander(async (req, res, next) => {
     throw new ApiError(409, "User with email or username already exists");
   }
 
-  const avatarLocalPath = req.files?.avatar[0]?.path;
-  console.log(req.files);
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  // console.log("req.files:",req.files);
+
+  const avatarLocalPath = req.files?.avatar?.[0]?.path;
+  // console.log(req.files);
+  // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+  let coverImageLocalPath;
+  if (
+    req.files &&
+    Array.isArray(req.files.coverImage) &&
+    req.files.coverImage[0].length > 0
+  ) {
+    coverImageLocalPath = req.files.coverImage[0].path;
+  }
 
   if (!avatarLocalPath) {
-    throw new ApiError(400, "Avatar file is required");
+    throw new ApiError(400, "Avatar file localpath is required");
   }
 
   const avatar = await uploadOnCloudinary(avatarLocalPath);
@@ -59,13 +70,11 @@ export const registerUser = asyncHander(async (req, res, next) => {
     "-password -refreshToken"
   );
 
-  if(!createdUser){
-    throw new ApiError(500, "Something went wrong while registering the user")
+  if (!createdUser) {
+    throw new ApiError(500, "Something went wrong while registering the user");
   }
 
-  return res.status(201).json(
-    new ApiResponse(200,createdUser,"User Registered Successfully")
-  )
-
-
+  return res
+    .status(201)
+    .json(new ApiResponse(200, createdUser, "User Registered Successfully"));
 });
