@@ -261,7 +261,7 @@ const updateAccountDetails = asyncHander(async (req, res) => {
     throw new ApiError(400, "All fields are required");
   }
 
-  const user = User.findByIdAndUpdate(
+  const user = await User.findByIdAndUpdate(
     req.user?._id,
 
     {
@@ -286,12 +286,13 @@ const updateUserAvatar = asyncHander(async (req, res) => {
     throw new ApiError(400, "avatar file is missing");
   }
 
+  
   const avatar = await uploadOnCloudinary(avatarLocalPath);
-
+  
   if (!avatar.url) {
     throw new ApiError(400, "Error while uploding avatar on cloudinary");
   }
-
+  
   const user = await User.findByIdAndUpdate(
     req.user?._id,
 
@@ -300,10 +301,11 @@ const updateUserAvatar = asyncHander(async (req, res) => {
         avatar: avatar.url,
       },
     },
-
+    
     { new: true }
-  ).select("-password");
+    ).select("-password");
 
+    // TODO: delete old image
   return res
   .status(200)
   .json(
