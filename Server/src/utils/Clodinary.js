@@ -37,7 +37,7 @@ export const deleteFromCloudinary = async (filePath) => {
       return null;
     }
     await cloudinary.uploader.destroy(filePath, function (result) {
-      console.log(result);
+      console.log("Delete from cloudinary result:",result);
     });
   } catch (error) {
     console.log("Error while file deleting from cloudinary");
