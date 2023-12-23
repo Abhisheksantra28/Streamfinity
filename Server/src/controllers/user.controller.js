@@ -308,7 +308,7 @@ const updateUserAvatar = asyncHander(async (req, res) => {
     { new: true }
   ).select("-password");
 
-  // TODO: delete old image
+  // TODO completed but need to tested: delete old image 
   await deleteFromCloudinary(avatarUrlToBeDeleted);
 
   return res
