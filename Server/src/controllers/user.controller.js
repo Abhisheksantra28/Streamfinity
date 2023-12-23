@@ -1,7 +1,10 @@
 import { asyncHander } from "../utils/asycHandler.js";
 import ApiError from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
-import { uploadOnCloudinary } from "../utils/Clodinary.js";
+import {
+  uploadOnCloudinary,
+  deleteFromCloudinary,
+} from "../utils/Clodinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import Jwt from "jsonwebtoken";
 
@@ -281,6 +284,7 @@ const updateAccountDetails = asyncHander(async (req, res) => {
 
 const updateUserAvatar = asyncHander(async (req, res) => {
   const avatarLocalPath = req.file?.path;
+  const avatarUrlToBeDeleted = req.user.avatar;
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "avatar file is missing");
@@ -305,6 +309,8 @@ const updateUserAvatar = asyncHander(async (req, res) => {
   ).select("-password");
 
   // TODO: delete old image
+  await deleteFromCloudinary(avatarUrlToBeDeleted);
+
   return res
     .status(200)
     .json(new ApiResponse(200, user, "Avatar updated successfully"));
@@ -404,19 +410,17 @@ const getUserChannelProfile = asyncHander(async (req, res) => {
         email: 1,
       },
     },
-
   ]);
 
-  if(!channel?.length){
-    throw new ApiError(404, "channel does not exist")
+  if (!channel?.length) {
+    throw new ApiError(404, "channel does not exist");
   }
 
   return res
-  .status(200)
-  .json(
-    new ApiResponse(200,channel[0],"user channel fetched successfully")
-  )
-
+    .status(200)
+    .json(
+      new ApiResponse(200, channel[0], "user channel fetched successfully")
+    );
 });
 
 export {
