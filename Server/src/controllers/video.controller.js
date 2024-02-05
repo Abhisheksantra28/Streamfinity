@@ -235,6 +235,22 @@ const updateVideo = asyncHander(async (req, res) => {
 const deleteVideo = asyncHander(async (req, res) => {
   const { videoId } = req.params;
   //TODO: delete video
+  if(!isValidObjectId(videoId)){
+    throw new ApiError(400,"Invalid videoId!")
+  }
+
+  const deletedVideo = await Video.findByIdAndDelete(videoId)
+  
+  if(!deletedVideo){
+    throw new ApiError(500, "Something went wrong while deleting this video!")
+  }
+
+  await deleteFromCloudinary(deletedVideo.videFile)
+  await deleteFromCloudinary(deletedVideo.thumbnail)
+
+  return res
+  .status(200)
+  .json(new ApiResponse(200,{},"video deleted successfully!"))
 });
 
 const togglePublishStatus = asyncHander(async (req, res) => {
